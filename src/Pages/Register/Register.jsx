@@ -27,16 +27,16 @@ const Register = () => {
 
     const handleRegister = data => {
 
-        // const email = form.email.value
-        // const password = form.password.value
-        // const name = form.name.value
-        // const photoUrl = form.photoUrl.value
+        const email = data.email
+        const password = data.password
+        const name = data.name
+        const photoUrl = data.photoUrl
 
         console.log(data)
 
-        if (data.password.length > 6) {
-            if (passwordRegex.test(data.password)) {
-                createUser(data.email, data.password, data.name, data.photoUrl)
+        if (password.length > 6) {
+            if (passwordRegex.test(password)) {
+                createUser(email, password, name, photoUrl)
                 if (user) {
                     Swal.fire({
                         title: 'Success',
@@ -97,7 +97,7 @@ const Register = () => {
                                     <span className="text-xl font-semibold">Upload photo</span>
                                 </label>
                                 <input type="file"
-                                    {...register("photoUrl", { required: true })}
+                                    {...register("photoUrl")}
                                     className="file-input file-input-bordered w-full max-w-xs" />
                             </div>
                             <div className="form-control mt-6">

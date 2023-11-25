@@ -78,8 +78,6 @@ const Navbar = () => {
                     {links}
                 </ul>
             </div>
-
-
             <div className="navbar-end">
                 {
                     user ?

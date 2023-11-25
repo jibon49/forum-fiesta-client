@@ -6,6 +6,7 @@ import Home from "../Pages/Home/Home/Home";
 import Error from "../Pages/Error/Error";
 import Login from "../Pages/Login/Login";
 import Register from "../Pages/Register/Register";
+import ForumHome from "../Layout/ForumHome";
 
  export const router = createBrowserRouter([
     {
@@ -27,4 +28,10 @@ import Register from "../Pages/Register/Register";
         }
       ]
     },
+    {
+      path : "/forum-home",
+      element:<ForumHome></ForumHome>,
+      children: [
+      ]
+    }
   ]);
