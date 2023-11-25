@@ -1,23 +1,17 @@
 import { MdLogout, MdSpaceDashboard } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import userImg from "/user.png";
-// import { AuthContext } from "../../../AuthProviders/AuthProviders";
 import logo from "/logo.png"
 import bell from "/notification-bell.png"
-
-
-
-
-
-
+import { AuthContext } from "../../../AuthProviders/AuthProviders";
+import { useContext } from "react";
 
 
 const Navbar = () => {
 
 
-    const user = true;
 
-    // const { user, logOut } = useContext(AuthContext)
+    const { user, logOut } = useContext(AuthContext)
 
 
 
@@ -36,11 +30,13 @@ const Navbar = () => {
         >Membership</NavLink></li>
 
         {
-            user || <li><NavLink to='/join-us'
+            user ? <li><NavLink to='/join-us'
                 className={({ isActive, isPending }) =>
                     isPending ? "pending" : isActive ? "text-[#5453B9] font-bold" : ""
                 }
             >Join Us</NavLink></li>
+            :
+            <></>
         }
 
         <li><NavLink to='/'
@@ -55,7 +51,7 @@ const Navbar = () => {
 
 
     const handleLogout = () => {
-        // logOut();
+        logOut();
     }
 
 
@@ -101,10 +97,10 @@ const Navbar = () => {
                                                     </div>
                                                 </summary>
                                                 <ul className="p-2 bg-base-100">
-                                                    <li className="text-center mb-2">User Name</li>
+                                                    <li className="text-center mb-2">{"name"}</li>
                                                     <li className="underline"><NavLink to='/dashboard'
                                                     > Dashboard <MdSpaceDashboard></MdSpaceDashboard> </NavLink></li>
-                                                    <li><button>Logout <MdLogout></MdLogout> </button></li>
+                                                    <button onClick={handleLogout} className="btn btn-ghost w-full font-semibold">Logout <MdLogout></MdLogout></button>
                                                 </ul>
                                             </details>
                                         </li>
