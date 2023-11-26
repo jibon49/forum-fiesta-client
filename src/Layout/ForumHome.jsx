@@ -1,5 +1,5 @@
 import { FcClock } from "react-icons/fc";
-import { NavLink, Outlet } from "react-router-dom";
+import {  Link, NavLink, Outlet } from "react-router-dom";
 import Tags from "../Pages/Home/Tags/Tags";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -7,21 +7,30 @@ import like from '/like.png'
 import dislike from '/dislike.png'
 import comment from '/comments.png'
 import share from '/next.png'
+import useAxiosPublic, { axiosPublic } from './../Hooks/AxiosPublic/useAxiosPublic';
 
 
 
 const ForumHome = () => {
 
+    const axiosPublic = useAxiosPublic()
 
-    const { data: posts = [] } = useQuery({
+    const { data: allPosts = [], error, isLoading } = useQuery({
         queryKey: ['posts'],
         queryFn: async () => {
-            const res = await axios.get('/postjson.js')
+            const res = await axiosPublic.get('/posts')
             return res.data;
         }
     })
-
-    console.log(posts);
+    
+    if (isLoading) {
+        // Handle loading state, e.g., show a loading spinner
+        return <div>Loading...</div>;
+    }
+    
+    // Render your component with the fetched data
+    console.log(allPosts);
+    
 
     return (
         <>
@@ -30,7 +39,8 @@ const ForumHome = () => {
                     <h1>forum post</h1>
                     <div>
                         {
-                            posts.map(post => <div key={post.id} className="card  bg-base-100 shadow-xl p-10 mb-5 ">
+                            allPosts.map(post => 
+                            <div key={post.id} className="card  bg-base-100 shadow-xl p-10 mb-5 ">
                                 <div className="flex gap-5">
                                     <div className="avatar">
                                         <div className="w-14 h-14 rounded-full">
@@ -39,7 +49,8 @@ const ForumHome = () => {
                                     </div>
                                     <div className="">
                                         <h2 className="card-title mb-2">{post.title}</h2>
-                                        <p className="text-[#BDC3C7]">{post.description}</p>
+                                        <p className="text-[#BDC3C7]">{post.description.slice(0,200)}</p>
+                                        <span className="text-blue-700"> <Link to={`/post-details/${post._id}`}> Read more...</Link> </span>
                                     </div>
                                 </div>
                                 <div className="divider"></div>
@@ -60,6 +71,10 @@ const ForumHome = () => {
 
                                     </div>
                                     <div className="flex gap-2">
+
+                                        <div className="flex gap-2 items-center mr-5">
+                                            <p className="text-[#BDC3C7]">{post.tag}</p>
+                                        </div>
                                         <div className="flex gap-2 items-center">
                                             <button><img className="w-5" src={comment} alt="" /></button>
                                             <p className="text-red-500">{post.commentsCount}</p>
@@ -67,12 +82,12 @@ const ForumHome = () => {
                                         <div className="flex gap-2 items-center">
                                             <button><img className="w-5" src={share} alt="" /></button>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>)
                         }
                     </div>
-                    <Outlet></Outlet>
                 </div>
                 <div className="w-1/3">
                     <Tags></Tags>

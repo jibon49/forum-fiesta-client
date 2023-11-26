@@ -4,6 +4,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import Swal from 'sweetalert2'
 import { AuthContext } from '../../AuthProviders/AuthProviders';
 import { useForm } from 'react-hook-form';
+import useAxiosPublic from '../../Hooks/AxiosPublic/useAxiosPublic';
+import axios from 'axios';
+import useUserInfo from '../../Hooks/useUserInfo';
 
 
 
@@ -19,23 +22,39 @@ const Register = () => {
         formState: { errors },
     } = useForm()
 
+    const axiosPublic = useAxiosPublic();
+    // const userInfo = useUserInfo();
+
     const { createUser, user } = useContext(AuthContext)
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
 
     const location = useLocation();
     const navigate = useNavigate();
 
-    const handleRegister = data => {
+    const handleRegister = async data => {
 
         const email = data.email
         const password = data.password
         const name = data.name
-        const photoUrl = data.photoUrl
+        let photoUrl = data.photoUrl
 
         console.log(data)
 
         if (password.length > 6) {
             if (passwordRegex.test(password)) {
+
+                const imageFile = { image: data.photoUrl[0] }
+                const res = await axios.post(image_hosting_api, imageFile, {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                })
+
+                if (res.data.success) {
+
+                    photoUrl = res.data.data.display_url
+                }
+
                 createUser(email, password, name, photoUrl)
                 if (user) {
                     Swal.fire({
@@ -55,7 +74,6 @@ const Register = () => {
         else {
             toast.error("Password must be at least 6 character long")
         }
-
 
     }
 

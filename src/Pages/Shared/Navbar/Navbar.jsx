@@ -90,7 +90,7 @@ const Navbar = () => {
                                                 <summary>
                                                     <div className="avatar">
                                                         <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                                            <img src="https://i.ibb.co/G99KMH5/photo-1637684666587-91e51b10a555-auto-format-fit-max-q-80-blend-000000-blend-alpha-10-blend-mode-nor.jpg" />
+                                                            <img src={user.photoURL} />
                                                         </div>
                                                     </div>
                                                 </summary>

@@ -1,9 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
 import Swal from "sweetalert2";
-import axios from "axios";
 import PropTypes from 'prop-types';
 import { app } from "../../firebase_config";
+import { axiosPublic } from "../Hooks/AxiosPublic/useAxiosPublic";
 
 export const AuthContext = createContext(null)
 
@@ -22,6 +22,24 @@ const AuthProviders = ({ children }) => {
             setUser(currentUser);
             setLoading(false);
             console.log(currentUser);
+           
+            // if (currentUser) {
+            //     let membership = "bronze";
+            //     const userName = currentUser.displayName;
+            //     const userMail = currentUser.email;
+            //     const userPhoto = currentUser.photoURL;
+            //     const userJoined = currentUser.metadata.creationTime;
+            //     const userInfo = { userName, userMail, userPhoto, userJoined, membership };
+            //     console.log(userInfo);
+    
+            //     try {
+            //         axiosPublic.post('/users', userInfo);
+            //     } catch (error) {
+            //         console.error('Error sending user information to the database:', error);
+            //     }
+            // }
+
+            
 
             // if (currentUser) {
             //     axios.post('online-group-study-assignment-server-rcov966xi-jibon49.vercel.app/jwt', loggedEmail,
@@ -48,24 +66,41 @@ const AuthProviders = ({ children }) => {
     }, [user?.email])
 
 
-
-    const createUser = (email, password, name, photoUrl) => {
-        setLoading(true)
-        return createUserWithEmailAndPassword(auth, email, password)
-            .then(result => {
-                return updateProfile(result.user, { displayName: name, photoURL: photoUrl })
-            })
-            .catch(error => {
-                Swal.fire({
-                    title: 'Error!',
-                    text: error.message,
-                    icon: 'error',
-                    confirmButtonText: 'Not cool'
-                })
-                console.error(error)
-
-            })
-    }
+    const createUser = async (email, password, name, photoUrl) => {
+        setLoading(true);
+    
+        try {
+            const result = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(result.user, { displayName: name, photoURL: photoUrl });
+    
+            const { user } = result;
+            let membership = "bronze";
+            const userName = user.displayName;
+            const userMail = user.email;
+            const userPhoto = user.photoURL;
+            const userJoined = user.metadata.creationTime;
+            const userInfo = { userName, userMail, userPhoto, userJoined, membership };
+    
+            try {
+                await axiosPublic.post('/users', userInfo);
+                setLoading(false);
+            } catch (error) {
+                setLoading(false);
+                console.error('Error sending user information to the database:', error);
+            }
+    
+        } catch (error) {
+            setLoading(false);
+            Swal.fire({
+                title: 'Error!',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'Not cool'
+            });
+            console.error(error);
+        }
+    };
+    
 
     const logIn = (email, password) => {
         setLoading(true)
