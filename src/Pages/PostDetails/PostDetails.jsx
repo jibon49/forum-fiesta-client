@@ -1,4 +1,4 @@
-import { NavLink, useLoaderData } from "react-router-dom";
+import { useLoaderData, useParams } from "react-router-dom";
 import like from '/like.png'
 import dislike from '/dislike.png'
 import comment from '/comments.png'
@@ -8,11 +8,9 @@ import { FcClock } from "react-icons/fc";
 
 const PostDetails = () => {
 
-    const data = useLoaderData()
-   
-    console.log(data)
-    const {id, author, title, description,tag, time, commentsCount,votesCount} = data
-
+    const { id } = useParams();
+    const post = useLoaderData();
+    console.log(post);
 
     return (
         <div>
@@ -24,7 +22,7 @@ const PostDetails = () => {
                         </div>
                     </div>
                     <div className="">
-                        <h2 className="card-title mb-2">{"title"}</h2>
+                        <h2 className="card-title mb-2">{post.title}</h2>
                         <p className="text-[#BDC3C7]">{"description"}</p>
                     </div>
                 </div>

@@ -10,8 +10,11 @@ import Dashboard from "../Layout/Dashboard";
 import MyProfile from "../Pages/Dashboard/MyProfile/MyProfile";
 import AdPost from "../Pages/Dashboard/AdPost/AdPost";
 import PostDetails from "../Pages/PostDetails/PostDetails";
+import MyPost from "../Pages/MyPost/MyPost";
 
 export const router = createBrowserRouter([
+
+  
   {
     path: "/",
     element: <Main></Main>,
@@ -30,9 +33,9 @@ export const router = createBrowserRouter([
         element: <Register></Register>
       },
       {
-        path: "/post-details:id",
-        element:<PostDetails></PostDetails>,
-        loader: ({params})=>fetch(`http://localhost:5000/post-details/${params.id}`)
+        path: '/post-details/:id',
+        element: <PostDetails></PostDetails>,
+        loader:({params})=>fetch(`http://localhost:5000/posts/${params.id}`)
       }
     ]
   },
@@ -49,6 +52,10 @@ export const router = createBrowserRouter([
       {
         path: 'ad-post',
         element: <AdPost></AdPost>
+      },
+      {
+        path:'my-post',
+        element:<MyPost></MyPost>
       }
     ]
   }

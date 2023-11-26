@@ -1,5 +1,5 @@
 import { FcClock } from "react-icons/fc";
-import {  Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import Tags from "../Pages/Home/Tags/Tags";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
@@ -7,8 +7,7 @@ import like from '/like.png'
 import dislike from '/dislike.png'
 import comment from '/comments.png'
 import share from '/next.png'
-import useAxiosPublic, { axiosPublic } from './../Hooks/AxiosPublic/useAxiosPublic';
-
+import useAxiosPublic from "../Hooks/AxiosPublic/useAxiosPublic";
 
 
 const ForumHome = () => {
@@ -22,15 +21,13 @@ const ForumHome = () => {
             return res.data;
         }
     })
-    
+
     if (isLoading) {
-        // Handle loading state, e.g., show a loading spinner
         return <div>Loading...</div>;
     }
-    
-    // Render your component with the fetched data
+
     console.log(allPosts);
-    
+
 
     return (
         <>
@@ -39,53 +36,54 @@ const ForumHome = () => {
                     <h1>forum post</h1>
                     <div>
                         {
-                            allPosts.map(post => 
-                            <div key={post.id} className="card  bg-base-100 shadow-xl p-10 mb-5 ">
-                                <div className="flex gap-5">
-                                    <div className="avatar">
-                                        <div className="w-14 h-14 rounded-full">
-                                            <img src={post.author.avatar} />
+                            allPosts.map(post =>
+                                <div key={post._id} className="card  bg-base-100 shadow-xl p-10 mb-5 ">
+                                    <div className="flex gap-5">
+                                        <div className="avatar">
+                                            <div className="w-14 h-14 rounded-full">
+                                                <img src={post.author.avatar} />
+                                            </div>
+                                        </div>
+                                        <div className="">
+                                            <h2 className="card-title mb-2">{post.title}</h2>
+                                            <p className="text-[#BDC3C7]">{post.description.slice(0, 200)}</p>
+                                            <span className="text-blue-700"> <Link to={`/post-details/${post._id}`}>Read more...</Link>
+                                            </span>
                                         </div>
                                     </div>
-                                    <div className="">
-                                        <h2 className="card-title mb-2">{post.title}</h2>
-                                        <p className="text-[#BDC3C7]">{post.description.slice(0,200)}</p>
-                                        <span className="text-blue-700"> <Link to={`/post-details/${post._id}`}> Read more...</Link> </span>
-                                    </div>
-                                </div>
-                                <div className="divider"></div>
-                                <div className="flex items-center justify-around">
-                                    <div className="flex items-center gap-10">
-                                        <div className="flex gap-2 items-center">
-                                            <button><img className="w-5" src={like} alt="" /></button>
-                                            <p className="text-green-500">{post.votesCount.upvotes}</p>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <button><img className="w-6" src={dislike} alt="" /></button>
-                                            <p className="text-red-500">{post.votesCount.downvotes}</p>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <FcClock className="text-2xl"></FcClock>
-                                            <p className="text-[#BDC3C7]">{post.time}</p>
-                                        </div>
+                                    <div className="divider"></div>
+                                    <div className="flex items-center justify-around">
+                                        <div className="flex items-center gap-10">
+                                            <div className="flex gap-2 items-center">
+                                                <button><img className="w-5" src={like} alt="" /></button>
+                                                <p className="text-green-500">{post.votesCount.upvotes}</p>
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <button><img className="w-6" src={dislike} alt="" /></button>
+                                                <p className="text-red-500">{post.votesCount.downvotes}</p>
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <FcClock className="text-2xl"></FcClock>
+                                                <p className="text-[#BDC3C7]">{post.time}</p>
+                                            </div>
 
-                                    </div>
-                                    <div className="flex gap-2">
+                                        </div>
+                                        <div className="flex gap-2">
 
-                                        <div className="flex gap-2 items-center mr-5">
-                                            <p className="text-[#BDC3C7]">{post.tag}</p>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <button><img className="w-5" src={comment} alt="" /></button>
-                                            <p className="text-red-500">{post.commentsCount}</p>
-                                        </div>
-                                        <div className="flex gap-2 items-center">
-                                            <button><img className="w-5" src={share} alt="" /></button>
-                                        </div>
+                                            <div className="flex gap-2 items-center mr-5">
+                                                <p className="text-[#BDC3C7]">{post.tag}</p>
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <button><img className="w-5" src={comment} alt="" /></button>
+                                                <p className="text-red-500">{post.commentsCount}</p>
+                                            </div>
+                                            <div className="flex gap-2 items-center">
+                                                <button><img className="w-5" src={share} alt="" /></button>
+                                            </div>
 
+                                        </div>
                                     </div>
-                                </div>
-                            </div>)
+                                </div>)
                         }
                     </div>
                 </div>

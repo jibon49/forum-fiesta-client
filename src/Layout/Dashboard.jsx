@@ -66,7 +66,7 @@ const Dashboard = () => {
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to='my-profile'>
+                                <NavLink to='my-post'>
                                     <IoIosDocument></IoIosDocument> My Post
                                 </NavLink>
                             </li>

@@ -3,7 +3,7 @@ import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWith
 import Swal from "sweetalert2";
 import PropTypes from 'prop-types';
 import { app } from "../../firebase_config";
-import { axiosPublic } from "../Hooks/AxiosPublic/useAxiosPublic";
+import useAxiosPublic from "../Hooks/AxiosPublic/useAxiosPublic";
 
 export const AuthContext = createContext(null)
 
@@ -82,7 +82,7 @@ const AuthProviders = ({ children }) => {
             const userInfo = { userName, userMail, userPhoto, userJoined, membership };
     
             try {
-                await axiosPublic.post('/users', userInfo);
+                await useAxiosPublic.post('/users', userInfo);
                 setLoading(false);
             } catch (error) {
                 setLoading(false);
