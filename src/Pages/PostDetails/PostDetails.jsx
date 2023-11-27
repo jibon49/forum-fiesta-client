@@ -4,13 +4,16 @@ import dislike from '/dislike.png'
 import comment from '/comments.png'
 import share from '/next.png'
 import { FcClock } from "react-icons/fc";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import useAxiosPublic from "../../Hooks/AxiosPublic/useAxiosPublic";
 import PostComments from "../../Components/PostComments/PostComments";
 import CommentBox from "../../Components/CommentBox";
+import { AuthContext } from "../../AuthProviders/AuthProviders";
+import { useQuery } from "@tanstack/react-query";
 
 
 const PostDetails = () => {
+
 
     const axiosPublic = useAxiosPublic()
     const [userDetails, setUserDetails] = useState()
@@ -20,14 +23,32 @@ const PostDetails = () => {
 
     const { _id, author, title, description, tag, time, commentsCount, votesCount } = post
 
+    const url = `/comments?postId=${post.postId}`
+    console.log(post.postId)
+
+    const { data: allComments = [], refetch, error, isLoading } = useQuery(
+        {
+            queryKey: ['commentOnPost', post.postId],
+            queryFn: async () => {
+                const response = await axiosPublic.get(url, { credentials: 'include' });
+                return response.data;
+            }
+        }
+    );
+
     useEffect(() => {
         axiosPublic.get(`/users/${author?.email}`)
             .then(res => setUserDetails(res.data))
+            
     }, [axiosPublic, author.email])
 
+    refetch()
 
-    console.log(post);
-    console.log(userDetails)
+    console.log(allComments);
+
+    
+
+    
 
     return (
         <div className="max-w-6xl mx-auto mt-20">
@@ -112,20 +133,25 @@ const PostDetails = () => {
 
                     {/* comments */}
                     <div>
-                        <CommentBox></CommentBox>
+                        <CommentBox 
+                        postId={post.postId}
+                        ></CommentBox>
                     </div>
                 </div>
             </div>
 
-            {/* comment */}
+            {/* comment*/}
             <div className="border border-b-0">
                 <div className="bg-slate-400 h-16 flex items-center text-white">
                     <h1 className="text-2xl p-5">Comments</h1>
                 </div>
                 {/* comments */}
                 <div>
-                    <PostComments></PostComments>
-                    <PostComments></PostComments>
+                    {
+                        allComments.map(comment=><PostComments
+                            comment={comment}
+                            key={comment._id}></PostComments>)
+                    }
                 </div>
             </div>
 
