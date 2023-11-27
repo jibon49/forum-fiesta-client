@@ -2,7 +2,7 @@ import { useContext } from "react";
 import useAxiosPublic from "../../Hooks/AxiosPublic/useAxiosPublic";
 import { AuthContext } from "../../AuthProviders/AuthProviders";
 import { FcComments, FcEmptyTrash } from "react-icons/fc";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
@@ -96,7 +96,7 @@ const MyPost = () => {
                                                 </td>
 
                                                 <td className="py-2 px-4 text-center flex justify-center text-xl">
-                                                    <NavLink to={`/posts-details/${post._id}`} className='hover:bg-blue-500 px-3 py-1 rounded-xl'><FcComments></FcComments></NavLink>
+                                                    <Link to={`/post-details/${post._id}`} className='hover:bg-blue-500 px-3 py-1 rounded-xl'><FcComments></FcComments></Link>
                                                 </td>
 
                                                 <td className="py-2 px-4">

@@ -1,81 +1,106 @@
-import { useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import { AuthContext } from '../../AuthProviders/AuthProviders';
 import { useForm } from 'react-hook-form';
 import useAxiosPublic from '../../Hooks/AxiosPublic/useAxiosPublic';
 import axios from 'axios';
-import useUserInfo from '../../Hooks/useUserInfo';
-
-
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
-
 const Register = () => {
-
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm()
+    } = useForm();
 
     const axiosPublic = useAxiosPublic();
-    // const userInfo = useUserInfo();
-
-    const { createUser, user } = useContext(AuthContext)
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+    const { createUser, user, loading } = useContext(AuthContext);
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
 
     const location = useLocation();
     const navigate = useNavigate();
 
-    const handleRegister = async data => {
-
-        const email = data.email
-        const password = data.password
-        const name = data.name
-        let photoUrl = data.photoUrl
-
-        console.log(data)
+    const handleRegister = async (data) => {
+        const email = data.email;
+        const password = data.password;
+        const name = data.name;
+        let photoUrl = data.photoUrl;
 
         if (password.length > 6) {
             if (passwordRegex.test(password)) {
-
-                const imageFile = { image: data.photoUrl[0] }
+                const imageFile = { image: data.photoUrl[0] };
                 const res = await axios.post(image_hosting_api, imageFile, {
                     headers: {
-                        'content-type': 'multipart/form-data'
-                    }
-                })
+                        'content-type': 'multipart/form-data',
+                    },
+                });
 
                 if (res.data.success) {
-
-                    photoUrl = res.data.data.display_url
+                    photoUrl = res.data.data.display_url;
                 }
 
-                createUser(email, password, name, photoUrl)
-                if (user) {
+                createUser(email, password, name, photoUrl);
+            } else {
+                toast.error(
+                    'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
+                );
+            }
+        } else {
+            toast.error('Password must be at least 6 characters long');
+        }
+    };
+
+    useEffect(() => {
+        const sendUserInfoToDatabase = async () => {
+
+            const isDataSent = localStorage.getItem('isDataSent');
+
+            if (!loading && user && !isDataSent) {
+                let membership = 'bronze';
+                let userRole = 'member';
+                const userName = user.displayName;
+                const userMail = user.email;
+                const userPhoto = user.photoURL;
+                const userJoined = user.metadata.creationTime;
+                const userInfo = {
+                    userName,
+                    userMail,
+                    userPhoto,
+                    userJoined,
+                    membership,
+                    userRole,
+                };
+
+                try {
+                    await axiosPublic.post('/users', userInfo)
+                    .then(res=>console.log(res.data))
+
+                    localStorage.setItem('isDataSent', 'true')
+                } catch (error) {
+                    console.error(error);
+                }
+
+                if(!isDataSent){
                     Swal.fire({
                         title: 'Success',
                         text: 'Login Success',
                         icon: 'success',
-                        confirmButtonText: 'Cool'
-                    })
+                        confirmButtonText: 'Cool',
+                    });
                 }
-                navigate(location?.state ? location.state : '/')
 
+                // Navigate after successful registration
+                // navigate(location?.state ? location.state : '/');
             }
-            else {
-                toast.error("Password must be contain at least one uppercase letter, one lowercase letter, one digit, and one special character.")
-            }
-        }
-        else {
-            toast.error("Password must be at least 6 character long")
-        }
+        };
 
-    }
+        sendUserInfoToDatabase();
+    }, [loading, user, axiosPublic, location, navigate]);
+    
 
 
     return (

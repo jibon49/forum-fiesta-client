@@ -68,29 +68,11 @@ const AuthProviders = ({ children }) => {
 
     const createUser = async (email, password, name, photoUrl) => {
         setLoading(true);
-    
         try {
             const result = await createUserWithEmailAndPassword(auth, email, password);
             await updateProfile(result.user, { displayName: name, photoURL: photoUrl });
-    
-            const { user } = result;
-            let membership = "bronze";
-            const userName = user.displayName;
-            const userMail = user.email;
-            const userPhoto = user.photoURL;
-            const userJoined = user.metadata.creationTime;
-            const userInfo = { userName, userMail, userPhoto, userJoined, membership };
-    
-            try {
-                await useAxiosPublic.post('/users', userInfo);
-                setLoading(false);
-            } catch (error) {
-                setLoading(false);
-                console.error('Error sending user information to the database:', error);
-            }
-    
+            return result;
         } catch (error) {
-            setLoading(false);
             Swal.fire({
                 title: 'Error!',
                 text: error.message,
@@ -98,8 +80,11 @@ const AuthProviders = ({ children }) => {
                 confirmButtonText: 'Not cool'
             });
             console.error(error);
+        } finally {
+            setLoading(false);
         }
     };
+    
     
 
     const logIn = (email, password) => {
@@ -120,7 +105,8 @@ const AuthProviders = ({ children }) => {
         createUser,
         logIn,
         loading,
-        logOut
+        logOut,
+        updateProfile
     }
 
 

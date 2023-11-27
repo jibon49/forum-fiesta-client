@@ -52,6 +52,7 @@ const Navbar = () => {
 
     const handleLogout = () => {
         logOut();
+        localStorage.removeItem('isDataSent')
     }
 
 
@@ -95,7 +96,7 @@ const Navbar = () => {
                                                     </div>
                                                 </summary>
                                                 <ul className="p-2 bg-base-100">
-                                                    <li className="text-center mb-2">{"name"}</li>
+                                                    <li className="text-center mb-2">{user.displayName}</li>
                                                     <li className="underline"><NavLink to='/dashboard'
                                                     > Dashboard <MdSpaceDashboard></MdSpaceDashboard> </NavLink></li>
                                                     <button onClick={handleLogout} className="btn btn-ghost w-full font-semibold">Logout <MdLogout></MdLogout></button>
