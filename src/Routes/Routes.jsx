@@ -16,6 +16,7 @@ import AdminProfile from "../Pages/AdminProfile/AdminProfile";
 import ManageUsers from "../Pages/ManageUsers/ManageUsers";
 import ReportedComments from "../Pages/ReportedComments/ReportedComments";
 import MakeAnnouncement from "../Pages/MakeAnnouncement/MakeAnnouncement";
+import StatusError from "../Pages/Error/StatusError";
 
 export const router = createBrowserRouter([
 
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login></Login>
+      },
+      {
+        path : '/statusError',
+        element : <StatusError></StatusError>
       },
       {
         path: '/register',

@@ -70,7 +70,7 @@ const MyPost = () => {
                 loading ? <span className="loading loading-spinner text-center mx-auto flex loading-lg"></span>
                     :
                     <div>
-                        <h1>My Assignment{myPosts.length}</h1>
+                        <h1>My Post{myPosts.length}</h1>
                         <div className="p-8 rounded-md shadow-md">
                             <h2 className="text-white text-2xl font-semibold mb-4">My Assignments</h2>
                             <div className="overflow-x-auto">

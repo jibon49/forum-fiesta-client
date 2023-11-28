@@ -5,39 +5,18 @@ import { IoIosAlert, IoIosDocument } from "react-icons/io";
 import { FaBullhorn, FaPerson } from "react-icons/fa6";
 import { useContext } from "react";
 import { AuthContext } from "../AuthProviders/AuthProviders";
+import useAdmin from "../Hooks/useAdmin";
 
 const Dashboard = () => {
 
     const { user } = useContext(AuthContext);
+    const [isAdmin] = useAdmin();
+    console.log(isAdmin)
 
-    const isAdmin = true;
 
     return (
         <div className="flex">
-            {/* <div className=" w-64 p-10 bg-[#2B2A3F] h-screen text-[#BCBBC7]">
-                <img className="mb-10" src={logo} alt="" />
-                <hr />
-                <ul className="mt-10 menu">
-                    <li>
-                        <NavLink to='my-profile'>
-                            My Profile
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to='my-profile'>
-                            Ad Post
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to='my-profile'>
-                            My Post
-                        </NavLink>
-                    </li>
-                </ul>
-            </div> */}
-
-
-            <div className="drawer lg:drawer-open ">
+             <div className="drawer lg:drawer-open ">
                 <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
                 <div className="drawer-content flex flex-row md:flex-col items-center  justify-start md:justify-normal">
                     {/* Page content here */}
