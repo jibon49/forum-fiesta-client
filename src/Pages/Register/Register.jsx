@@ -6,6 +6,7 @@ import { AuthContext } from '../../AuthProviders/AuthProviders';
 import { useForm } from 'react-hook-form';
 import useAxiosPublic from '../../Hooks/AxiosPublic/useAxiosPublic';
 import axios from 'axios';
+import { updateProfile } from 'firebase/auth';
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -29,7 +30,7 @@ const Register = () => {
         const password = data.password;
         const name = data.name;
         let photoUrl = data.photoUrl;
-
+    
         if (password.length > 6) {
             if (passwordRegex.test(password)) {
                 const imageFile = { image: data.photoUrl[0] };
@@ -38,12 +39,53 @@ const Register = () => {
                         'content-type': 'multipart/form-data',
                     },
                 });
-
+    
                 if (res.data.success) {
                     photoUrl = res.data.data.display_url;
                 }
-
-                createUser(email, password, name, photoUrl);
+    
+                try {
+                    const result = await createUser(email, password);
+                    const loggedUser = result.user;
+    
+                    updateProfile(loggedUser, {
+                        displayName: name,
+                        photoURL: photoUrl,
+                    })
+                        .then(() => {
+                            let membership = 'bronze';
+                            let userRole = 'member';
+                            const userName = name;
+                            const userMail = email;
+                            const userPhoto = photoUrl; // Use the updated photoUrl
+                            const userJoined = loggedUser.metadata.creationTime;
+    
+                            const userInfo = {
+                                userName,
+                                userMail,
+                                userPhoto,
+                                userJoined,
+                                membership,
+                                userRole,
+                            };
+                            axiosPublic.post('/users', userInfo)
+                                .then(res => {
+                                    if (res.data.insertedId) {
+                                        console.log('user added to database');
+                                        Swal.fire({
+                                            position: 'top-end',
+                                            icon: 'success',
+                                            title: 'User created successfully.',
+                                            showConfirmButton: false,
+                                            timer: 1500
+                                        });
+                                        navigate(location?.state ? location.state : '/');
+                                    }
+                                });
+                        });
+                } catch (error) {
+                    console.error(error);
+                }
             } else {
                 toast.error(
                     'Password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.'
@@ -53,51 +95,6 @@ const Register = () => {
             toast.error('Password must be at least 6 characters long');
         }
     };
-
-    useEffect(() => {
-        const sendUserInfoToDatabase = async () => {
-
-            const isDataSent = localStorage.getItem('isDataSent');
-
-            if (!loading && user && !isDataSent) {
-                let membership = 'bronze';
-                let userRole = 'member';
-                const userName = user.displayName;
-                const userMail = user.email;
-                const userPhoto = user.photoURL;
-                const userJoined = user.metadata.creationTime;
-                const userInfo = {
-                    userName,
-                    userMail,
-                    userPhoto,
-                    userJoined,
-                    membership,
-                    userRole,
-                };
-
-                try {
-                    await axiosPublic.post('/users', userInfo)
-                    .then(res=>console.log(res.data))
-
-                    localStorage.setItem('isDataSent', 'true')
-                } catch (error) {
-                    console.error(error);
-                }
-
-                if(!isDataSent){
-                    Swal.fire({
-                        title: 'Success',
-                        text: 'Login Success',
-                        icon: 'success',
-                        confirmButtonText: 'Cool',
-                    });
-                }
-                navigate(location?.state ? location.state : '/');
-            }
-        };
-
-        sendUserInfoToDatabase();
-    }, [loading, user, axiosPublic, location, navigate]);
     
 
 

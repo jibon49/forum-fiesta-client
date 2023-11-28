@@ -66,24 +66,37 @@ const AuthProviders = ({ children }) => {
     }, [user?.email])
 
 
-    const createUser = async (email, password, name, photoUrl) => {
+    // const createUser = async (email, password, name, photoUrl) => {
+    //     setLoading(true);
+    //     try {
+    //         const result = await createUserWithEmailAndPassword(auth, email, password);
+    //         await updateProfile(result.user, { displayName: name, photoURL: photoUrl });
+    //         return result;
+    //     } catch (error) {
+    //         Swal.fire({
+    //             title: 'Error!',
+    //             text: error.message,
+    //             icon: 'error',
+    //             confirmButtonText: 'Not cool'
+    //         });
+    //         console.error(error);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    const updateProfile = (name, photoUrl) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name, photoURL: photoUrl
+        });
+    }
+
+    const createUser = (email, password) => {
         setLoading(true);
-        try {
-            const result = await createUserWithEmailAndPassword(auth, email, password);
-            await updateProfile(result.user, { displayName: name, photoURL: photoUrl });
-            return result;
-        } catch (error) {
-            Swal.fire({
-                title: 'Error!',
-                text: error.message,
-                icon: 'error',
-                confirmButtonText: 'Not cool'
-            });
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+        return createUserWithEmailAndPassword(auth, email, password)
+    }
+
+
     
     
 
