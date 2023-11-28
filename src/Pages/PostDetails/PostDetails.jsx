@@ -18,10 +18,16 @@ const PostDetails = () => {
     const axiosPublic = useAxiosPublic()
     const [userDetails, setUserDetails] = useState()
 
+
     const { id } = useParams();
     const post = useLoaderData();
 
-    const { _id, author, title, description, tag, time, commentsCount, votesCount } = post
+    const { _id, author, title, description, tag, time, commentsCount ,votesCount } = post
+
+    const {upvotes} = votesCount
+
+    const [likes, setLikes] = useState(upvotes)
+    const [disLikes, setDislikes] = useState(votesCount.downvotes)
 
     const url = `/comments?postId=${post.postId}`
     console.log(post.postId)
@@ -36,19 +42,51 @@ const PostDetails = () => {
         }
     );
 
+
+
+
     useEffect(() => {
         axiosPublic.get(`/users/${author?.email}`)
             .then(res => setUserDetails(res.data))
-            
+
     }, [axiosPublic, author.email])
 
-    refetch()
+
 
     console.log(allComments);
 
+    const handleUpVote = async () => {
+        try {
+            const response = await axiosPublic.patch(`/posts/${_id}`, {
+                "upvotes": likes + 1,
+                "downvotes": disLikes 
+            });
+            console.log(response.data);
+            setLikes(likes + 1);
+            refetch();
+        } catch (error) {
+            console.error('Error updating like count:', error);
+        }
+    };
+
+    const handleDownVote = async () => {
+        try {
+            const response = await axiosPublic.patch(`/posts/${_id}`, {
+                "upvotes": likes,
+                "downvotes": disLikes + 1,
+            });
+            console.log(response.data);
+            setDislikes(disLikes + 1);
+            refetch();
+        } catch (error) {
+            console.error('Error updating dislike count:', error);
+        }
+    };
     
 
-    
+
+
+
 
     return (
         <div className="max-w-6xl mx-auto mt-20">
@@ -101,11 +139,13 @@ const PostDetails = () => {
                         <div className="flex items-center justify-around">
                             <div className="flex items-center gap-10">
                                 <div className="flex gap-2 items-center">
-                                    <button><img className="w-5" src={like} alt="" /></button>
-                                    <p className="text-green-500">{votesCount.upvotes}</p>
+                                    <button onClick={handleUpVote}><img className="w-5" src={like} alt="" /></button>
+                                    <p className="text-green-500">{upvotes}</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <button><img className="w-6" src={dislike} alt="" /></button>
+                                    <button
+                                        onClick={handleDownVote}
+                                    ><img className="w-6" src={dislike} alt="" /></button>
                                     <p className="text-red-500">{votesCount.downvotes}</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
@@ -121,7 +161,7 @@ const PostDetails = () => {
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <button><img className="w-5" src={comment} alt="" /></button>
-                                    <p className="text-red-500">{commentsCount}</p>
+                                    <p className="text-red-500">{allComments.length}</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <button><img className="w-5" src={share} alt="" /></button>
@@ -133,8 +173,9 @@ const PostDetails = () => {
 
                     {/* comments */}
                     <div>
-                        <CommentBox 
-                        postId={post.postId}
+                        <CommentBox
+                            postId={post.postId}
+                            refetch={refetch}
                         ></CommentBox>
                     </div>
                 </div>
@@ -148,7 +189,7 @@ const PostDetails = () => {
                 {/* comments */}
                 <div>
                     {
-                        allComments.map(comment=><PostComments
+                        allComments.map(comment => <PostComments
                             comment={comment}
                             key={comment._id}></PostComments>)
                     }

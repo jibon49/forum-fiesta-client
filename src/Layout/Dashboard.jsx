@@ -1,14 +1,16 @@
 import { NavLink, Outlet } from "react-router-dom";
 import logo from "/logo.png"
 import { FaHome, FaListUl, FaMedal, FaPen, FaUser, FaUsers } from "react-icons/fa";
-import { IoIosDocument } from "react-icons/io";
-import { FaPerson } from "react-icons/fa6";
+import { IoIosAlert, IoIosDocument } from "react-icons/io";
+import { FaBullhorn, FaPerson } from "react-icons/fa6";
 import { useContext } from "react";
 import { AuthContext } from "../AuthProviders/AuthProviders";
 
 const Dashboard = () => {
 
-    const {user} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
+
+    const isAdmin = true;
 
     return (
         <div className="flex">
@@ -54,23 +56,51 @@ const Dashboard = () => {
                         <img className="mb-10" src={logo} alt="" />
                         <hr className="mb-10" />
                         {/* Sidebar content here */}
-                        <>
-                            <li>
-                                <NavLink to='my-profile'>
-                                    <FaUser></FaUser> My Profile
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to='ad-post'>
-                                    <FaPen></FaPen> Ad Post
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to='my-post'>
-                                    <IoIosDocument></IoIosDocument> My Post
-                                </NavLink>
-                            </li>
-                        </>
+                        {
+                            isAdmin ?
+                                <>
+                                    <li>
+                                        <NavLink to='adminProfile'>
+                                            <FaUser></FaUser> Admin Profile
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to='manageUsers'>
+                                            <FaPen></FaPen> Manage Users
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to='reportedComments'>
+                                            <IoIosAlert></IoIosAlert> Reported Comments
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to='makeAnnouncement'>
+                                            <FaBullhorn>
+                                            </FaBullhorn>
+                                            Make Announcement
+                                        </NavLink>
+                                    </li>
+                                </>
+                                :
+                                <>
+                                    <li>
+                                        <NavLink to='my-profile'>
+                                            <FaUser></FaUser> My Profile
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to='ad-post'>
+                                            <FaPen></FaPen> Ad Post
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink to='my-post'>
+                                            <IoIosDocument></IoIosDocument> My Post
+                                        </NavLink>
+                                    </li>
+                                </>
+                        }
                         <hr className="my-10" />
                         <>
                             <li><NavLink to='/'
@@ -79,16 +109,16 @@ const Dashboard = () => {
                             <li><NavLink to='/membership'
                             ><FaMedal></FaMedal> Membership</NavLink></li>
 
-                             <li><NavLink to='/join-us'
-                                ><FaUsers></FaUsers> Join Us</NavLink></li>
-                      
-                    </>
+                            <li><NavLink to='/join-us'
+                            ><FaUsers></FaUsers> Join Us</NavLink></li>
 
-                </ul>
+                        </>
+
+                    </ul>
+
+                </div>
 
             </div>
-
-        </div>
 
 
         </div >

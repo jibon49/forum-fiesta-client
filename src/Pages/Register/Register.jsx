@@ -92,9 +92,7 @@ const Register = () => {
                         confirmButtonText: 'Cool',
                     });
                 }
-
-                // Navigate after successful registration
-                // navigate(location?.state ? location.state : '/');
+                navigate(location?.state ? location.state : '/');
             }
         };
 

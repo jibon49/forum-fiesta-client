@@ -30,13 +30,15 @@ const Navbar = () => {
         >Membership</NavLink></li>
 
         {
-            user ? <li><NavLink to='/join-us'
+            user ? 
+            <></>
+            :
+            <li><NavLink to='/join-us'
                 className={({ isActive, isPending }) =>
                     isPending ? "pending" : isActive ? "text-[#5453B9] font-bold" : ""
                 }
             >Join Us</NavLink></li>
-            :
-            <></>
+            
         }
 
         <li><NavLink to='/'
