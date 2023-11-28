@@ -65,8 +65,7 @@ const Login = () => {
         signInWithPopup(auth, provider)
             .then((result) => {
                 const user = result.user;
-                const sendUserInfoToDatabase = async () => {
-                    const isDataSent = localStorage.getItem('isDataSent');
+                
                     let membership = 'bronze';
                     let userRole = 'member';
                     const userName = user.displayName;
@@ -81,41 +80,23 @@ const Login = () => {
                         membership,
                         userRole,
                     };
-
-                    try {
-                        await axiosPublic.post('/users', userInfo)
-                            .then(res => console.log(res.data))
-
-                        localStorage.setItem('isDataSent', 'true')
+                     try { axiosPublic.post('/users', userInfo)
+                            .then(res => {
+                                console.log(res.data)
+                                if (res.data) {
+                                    Swal.fire({
+                                        title: 'Success',
+                                        text: 'Login Success',
+                                        icon: 'success',
+                                        confirmButtonText: 'Cool',
+                                    });
+                                }
+                                navigate(from, { replace: true })
+                            })
+                            
                     } catch (error) {
                         console.error(error);
                     }
-
-                    if (!isDataSent) {
-                        Swal.fire({
-                            title: 'Success',
-                            text: 'Login Success',
-                            icon: 'success',
-                            confirmButtonText: 'Cool',
-                        });
-                    }
-                    navigate(location?.state ? location.state : '/');
-
-                };
-                sendUserInfoToDatabase();
-
-                Swal.fire({
-                    title: 'Success',
-                    text: 'Login Success',
-                    icon: 'success',
-                    confirmButtonText: 'Cool'
-                })
-                navigate(from, { replace: true })
-                console.log("Google Sign-In Successful", user);
-            })
-            .catch((error) => {
-                console.error("Google Sign-In Error:", error);
-                toast.error('Google Sign-In Error');
             });
     };
 
