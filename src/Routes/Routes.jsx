@@ -17,6 +17,8 @@ import ManageUsers from "../Pages/ManageUsers/ManageUsers";
 import ReportedComments from "../Pages/ReportedComments/ReportedComments";
 import MakeAnnouncement from "../Pages/MakeAnnouncement/MakeAnnouncement";
 import StatusError from "../Pages/Error/StatusError";
+import UserMembership from "../Pages/UserMembership/UserMembership";
+import CheckOut from "../Pages/CheckOut/CheckOut";
 
 export const router = createBrowserRouter([
 
@@ -41,6 +43,14 @@ export const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register></Register>
+      },
+      {
+        path:'/membership',
+        element : <UserMembership></UserMembership>
+      },
+      {
+        path:'/checkout',
+        element : <CheckOut></CheckOut>
       },
       {
         path: '/post-details/:id',
