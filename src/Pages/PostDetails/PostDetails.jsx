@@ -10,6 +10,7 @@ import PostComments from "../../Components/PostComments/PostComments";
 import CommentBox from "../../Components/CommentBox";
 import { AuthContext } from "../../AuthProviders/AuthProviders";
 import { useQuery } from "@tanstack/react-query";
+import { FacebookShareButton } from "react-share";
 
 
 const PostDetails = () => {
@@ -17,14 +18,15 @@ const PostDetails = () => {
 
     const axiosPublic = useAxiosPublic()
     const [userDetails, setUserDetails] = useState()
+    const [shareUrl, setShareUrl] = useState(window.location.href);
 
 
     const { id } = useParams();
     const post = useLoaderData();
 
-    const { _id, author, title, description, tag, time, commentsCount ,votesCount } = post
+    const { _id, author, title, description, tag, time, commentsCount, votesCount } = post
 
-    const {upvotes} = votesCount
+    const { upvotes } = votesCount
 
     const [likes, setLikes] = useState(upvotes)
     const [disLikes, setDislikes] = useState(votesCount.downvotes)
@@ -42,6 +44,7 @@ const PostDetails = () => {
         }
     );
 
+    console.log(shareUrl)
 
 
 
@@ -59,7 +62,7 @@ const PostDetails = () => {
         try {
             const response = await axiosPublic.patch(`/posts/${_id}`, {
                 "upvotes": likes + 1,
-                "downvotes": disLikes 
+                "downvotes": disLikes
             });
             console.log(response.data);
             setLikes(likes + 1);
@@ -82,7 +85,7 @@ const PostDetails = () => {
             console.error('Error updating dislike count:', error);
         }
     };
-    
+
 
 
 
@@ -158,7 +161,7 @@ const PostDetails = () => {
                             </div>
 
 
-                            
+
                             <div className="flex gap-2">
 
                                 <div className="flex gap-2 items-center mr-5">
@@ -169,8 +172,11 @@ const PostDetails = () => {
                                     <p className="text-red-500">{allComments.length}</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
-                                    <button><img className="w-5" src={share} alt="" /></button>
+                                    <FacebookShareButton url={shareUrl}>
+                                        <img className="w-5" src={share} alt="Share on Facebook" />
+                                    </FacebookShareButton>
                                 </div>
+
 
                             </div>
                         </div>

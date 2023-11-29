@@ -23,6 +23,9 @@ const ForumHome = () => {
             return res.data;
         }
     })
+
+
+
     const { data: allAnnouncement = [] } = useQuery({
         queryKey: ['announcement'],
         queryFn: async () => {
@@ -61,7 +64,10 @@ const ForumHome = () => {
                         <div>
 
                         </div>
-                        <h1 className="bg-blue-500 p-3 font-bold text-white">Forum post</h1>
+                        <div>
+                            <h1 className="bg-blue-500 p-3 font-bold text-white">Forum post
+                        </h1>
+                        </div>
                         <div>
                             {
                                 allPosts.map(post =>
