@@ -1,17 +1,42 @@
-import dateFormat, { masks } from "dateformat";
-import { useContext } from 'react';
+import dateFormat from "dateformat";
+import { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2'
-import axios from 'axios';
 import { AuthContext } from '../../../AuthProviders/AuthProviders';
 import useAxiosPublic from "../../../Hooks/AxiosPublic/useAxiosPublic";
+import useAxiosSecure from "../../../Hooks/AxiosSecure/useAxiosSecure";
+import { useNavigate } from "react-router-dom";
 
 
 const AdPost = () => {
 
     const { user } = useContext(AuthContext)
     const postId = uuidv4();
+    const [myPostCount, setMyPostCount] = useState(0)
+    const [membershipStatus, setMembershipStatus] = useState('')
     const axiosPublic = useAxiosPublic()
+    const axiosSecure = useAxiosSecure()
+    const navigate = useNavigate()
+
+
+
+
+    const url = `/my-posts/count?email=${user.email}`
+
+    useEffect(() => {
+        axiosSecure.get(url)
+            .then(res => setMyPostCount(res.data.postCount))
+    }, [axiosSecure, url])
+
+    console.log(myPostCount)
+
+
+    useEffect(() => {
+        axiosSecure.get(`/users/membership/${user.email}`)
+            .then(res => setMembershipStatus(res.data.membership))
+    }, [axiosSecure, user.email])
+
+
 
     const handleAddAssignment = e => {
         e.preventDefault();
@@ -22,41 +47,71 @@ const AdPost = () => {
         const description = form.description.value;
         const time = dateFormat(new Date());
 
-        const author ={
-            name : user.displayName,
-            avatar : user.photoURL,
-            email : user.email
+        const author = {
+            name: user.displayName,
+            avatar: user.photoURL,
+            email: user.email
         }
         let commentsCount = 0;
 
         const votesCount = {
-            upvotes : 0,
-            downvotes : 0,
+            upvotes: 0,
+            downvotes: 0,
         }
 
-
-
-        const createPost = { postId, title, tag,  description, time, author,votesCount, commentsCount }
-
-
+        const createPost = { postId, title, tag, description, time, author, votesCount, commentsCount }
 
 
         console.log(createPost);
 
+        if (membershipStatus === 'gold') {
+            axiosPublic.post('/ad-post', createPost)
+                .then(data => {
+                    console.log(data.data);
+                    if (data.data.insertedId) {
+                        Swal.fire({
+                            title: 'Success',
+                            text: 'Assignment created Successfully',
+                            icon: 'success',
+                            confirmButtonText: 'Cool'
+                        })
+                    }
+                })
+        }
 
-        axiosPublic.post('/ad-post', createPost)
-            .then(data => {
-                console.log(data.data);
-                if (data.data.insertedId) {
-                    Swal.fire({
-                        title: 'Success',
-                        text: 'Assignment created Successfully',
-                        icon: 'success',
-                        confirmButtonText: 'Cool'
+        else {
+            if (myPostCount < 5) {
+                axiosPublic.post('/ad-post', createPost)
+                    .then(data => {
+                        console.log(data.data);
+                        if (data.data.insertedId) {
+                            Swal.fire({
+                                title: 'Success',
+                                text: 'Assignment created Successfully',
+                                icon: 'success',
+                                confirmButtonText: 'Cool'
+                            })
+                        }
                     })
-                }
-            })
+            }
 
+            else{
+                Swal.fire({
+                    title: "Post limit exceeded",
+                    text: "Become a gold member to post more than 5",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Pricing"
+                  }).then((result) => {
+                    if(result.isConfirmed){
+                        console.log(result)
+                    navigate('/membership')
+                    }
+                  });
+            }
+        }
 
     }
 
