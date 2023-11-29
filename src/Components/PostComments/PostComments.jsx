@@ -29,13 +29,6 @@ const PostComments = ({comment}) => {
                         <p className="text-[#BDC3C7]">{commentTime}</p>
                     </div>
                 </div>
-                <div className="">
-                    <div className="flex gap-2 items-center">
-                        <button className="text-2xl"><FcHighPriority></FcHighPriority></button>
-                        <p className="text-red-500">Report</p>
-                    </div>
-
-                </div>
             </div>
         </div>
     );

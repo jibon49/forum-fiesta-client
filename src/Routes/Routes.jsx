@@ -19,6 +19,7 @@ import MakeAnnouncement from "../Pages/MakeAnnouncement/MakeAnnouncement";
 import StatusError from "../Pages/Error/StatusError";
 import UserMembership from "../Pages/UserMembership/UserMembership";
 import CheckOut from "../Pages/CheckOut/CheckOut";
+import MyPostDetails from "../Pages/MyPostDetails/MyPostDetails";
 
 export const router = createBrowserRouter([
 
@@ -51,6 +52,11 @@ export const router = createBrowserRouter([
       {
         path:'/checkout',
         element : <CheckOut></CheckOut>
+      },
+      {
+        path:'my-post-details/:id',
+        element:<MyPostDetails></MyPostDetails>,
+        loader:({params})=>fetch(`http://localhost:5000/posts/${params.id}`)
       },
       {
         path: '/post-details/:id',

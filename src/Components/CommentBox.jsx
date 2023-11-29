@@ -22,10 +22,11 @@ const CommentBox = ({ postId, refetch }) => {
             const userComment = e.target.comment.value
             const commenterName = user.displayName;
             const commenterPhoto = user.photoURL;
-            let reported = false;
+            const commenterEmail = user.email;
+            let reported = '';
             const commentTime = dateFormat(new Date());
 
-            const userCommentInfo = { userComment, postInfo, commenterName, reported, commentTime, commenterPhoto }
+            const userCommentInfo = { userComment, postInfo, commenterName, reported, commentTime, commenterPhoto, commenterEmail }
             console.log(userCommentInfo)
 
             axiosPublic.post("/comments", userCommentInfo)

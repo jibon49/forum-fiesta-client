@@ -75,7 +75,9 @@ const AdPost = () => {
                             icon: 'success',
                             confirmButtonText: 'Cool'
                         })
+                        navigate('/dashboard/my-post')
                     }
+                    
                 })
         }
 
@@ -91,6 +93,7 @@ const AdPost = () => {
                                 icon: 'success',
                                 confirmButtonText: 'Cool'
                             })
+                            navigate('/dashboard/my-post')
                         }
                     })
             }

@@ -77,7 +77,7 @@ const MyPost = () => {
                                 <table className="min-w-full border border-white">
                                     <thead>
                                         <tr className="bg-indigo-500 text-white">
-                                            <th className="py-2 px-4">Assignment Title</th>
+                                            <th className="py-2 px-4">Post Title</th>
                                             <th className="py-2 px-4">Number of votes</th>
                                             <th className="py-2 px-4">Comments</th>
                                             <th className="py-2 px-4">Action</th>
@@ -96,7 +96,7 @@ const MyPost = () => {
                                                 </td>
 
                                                 <td className="py-2 px-4 text-center flex justify-center text-xl">
-                                                    <Link to={`/post-details/${post._id}`} className='hover:bg-blue-500 px-3 py-1 rounded-xl'><FcComments></FcComments></Link>
+                                                    <Link to={`/my-post-details/${post._id}`} className='hover:bg-blue-500 px-3 py-1 rounded-xl'><FcComments></FcComments></Link>
                                                 </td>
 
                                                 <td className="py-2 px-4">
