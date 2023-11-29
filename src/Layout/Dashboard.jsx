@@ -11,7 +11,6 @@ const Dashboard = () => {
 
     const { user } = useContext(AuthContext);
     const [isAdmin] = useAdmin();
-    console.log(isAdmin)
 
 
     return (

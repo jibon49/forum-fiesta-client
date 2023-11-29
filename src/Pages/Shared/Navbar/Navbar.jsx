@@ -5,14 +5,27 @@ import logo from "/logo.png"
 import bell from "/notification-bell.png"
 import { AuthContext } from "../../../AuthProviders/AuthProviders";
 import { useContext } from "react";
+import { FaBell } from "react-icons/fa";
+import useAxiosPublic from "../../../Hooks/AxiosPublic/useAxiosPublic";
+import { useQuery } from "@tanstack/react-query";
 
 
 const Navbar = () => {
+    const axiosPublic = useAxiosPublic()
 
 
 
     const { user, logOut } = useContext(AuthContext)
 
+
+
+    const { data: allAnnouncement = [] } = useQuery({
+        queryKey: ['announcement'],
+        queryFn: async () => {
+            const res = await axiosPublic.get('/announcement')
+            return res.data;
+        }
+    })
 
 
     const links = <>
@@ -45,7 +58,10 @@ const Navbar = () => {
             className={({ isActive, isPending }) =>
                 isPending ? "pending" : isActive ? "text-[#16eead] font-bold" : ""
             }
-        ><img className="w-5" src={bell} alt="" /></NavLink></li>
+        ><button className="flex items-center">
+        <FaBell className="text-xl"></FaBell>
+        <div className="badge badge-secondary">{allAnnouncement.length}</div>
+      </button></NavLink></li>
 
 
 

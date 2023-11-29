@@ -136,6 +136,8 @@ const PostDetails = () => {
                             </div>
                         </div>
                         <div className="divider"></div>
+
+
                         <div className="flex items-center justify-around">
                             <div className="flex items-center gap-10">
                                 <div className="flex gap-2 items-center">
@@ -154,6 +156,9 @@ const PostDetails = () => {
                                 </div>
 
                             </div>
+
+
+                            
                             <div className="flex gap-2">
 
                                 <div className="flex gap-2 items-center mr-5">

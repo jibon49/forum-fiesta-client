@@ -1,8 +1,13 @@
+import { useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import useAxiosPublic from "../../../Hooks/AxiosPublic/useAxiosPublic";
+import banner from "/banner.jpg"
 
 const Banner = () => {
+
+
     return (
-        <div className="hero min-h-[80vh]" style={{ backgroundImage: 'url(https://i.ibb.co/Fsw0KnM/blue-background-with-fluid-shapes-801037-3.jpg)' }}>
+        <div className="hero min-h-[80vh]" style={{ backgroundImage: `url(${banner})` }}>
             <div className="hero"></div>
             <div className="hero-content text-center text-neutral-content">
                 <div className="max-w-3xl text-white">
