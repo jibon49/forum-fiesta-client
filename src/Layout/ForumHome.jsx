@@ -10,11 +10,15 @@ import share from '/next.png'
 import { FaBullhorn } from "react-icons/fa";
 import useAxiosPublic from "../Hooks/AxiosPublic/useAxiosPublic";
 import Announcements from "../Pages/Home/Announcements/Announcements";
+import usePagination from "../Hooks/usePagination";
 
 
 const ForumHome = () => {
 
     const axiosPublic = useAxiosPublic()
+
+
+
 
     const { data: allPosts = [], error, isLoading } = useQuery({
         queryKey: ['posts'],
@@ -23,8 +27,21 @@ const ForumHome = () => {
             return res.data;
         }
     })
+    const itemsPerPage = 5;
+
+    const sortedPosts = allPosts.sort((a, b) => new Date(b.time) - new Date(a.time));
 
 
+    const { currentPage, paginatedData, handlePrevious, handleNext, numberOfPages, setCurrentPage } = usePagination(sortedPosts, itemsPerPage);
+
+
+    
+
+
+    
+    const pages = [...Array(numberOfPages).keys()];
+    
+    
 
     const { data: allAnnouncement = [] } = useQuery({
         queryKey: ['announcement'],
@@ -39,8 +56,7 @@ const ForumHome = () => {
         <span className="loading loading-ring loading-lg"></span>
     }
 
-
-
+    
     return (
         <>
 
@@ -70,7 +86,7 @@ const ForumHome = () => {
                         </div>
                         <div>
                             {
-                                allPosts.map(post =>
+                                paginatedData.map(post =>
                                     <div key={post._id} className="card  bg-base-100 shadow-xl p-10 mb-5 ">
                                         <div className="flex gap-5">
                                             <div className="avatar">
@@ -124,6 +140,25 @@ const ForumHome = () => {
                     <div className="w-1/3">
                         <Tags></Tags>
                     </div>
+                </div>
+            </div>
+
+            {/* pagination */}
+            <div className="max-w-6xl mx-auto items-center flex mt-20">
+                <div className="join mx-auto">
+
+                    <button className="join-item btn mr-2"
+                        onClick={handlePrevious}
+                    >Previous page</button>
+                    {
+                        pages.map(number => <button
+                            onClick={() => setCurrentPage(number)}
+                            key={number} className={`join-item btn ${currentPage === parseInt(number) ? 'bg-[#16eead]' : ''}`}>{number}</button>)
+                    }
+
+                    <button
+                        onClick={handleNext}
+                        className="join-item btn ml-2 rounded-r-lg">Next</button>
                 </div>
             </div>
 

@@ -46,7 +46,7 @@ const Navbar = () => {
             user ? 
             <></>
             :
-            <li><NavLink to='/join-us'
+            <li><NavLink to='/login'
                 className={({ isActive, isPending }) =>
                     isPending ? "pending" : isActive ? "text-[#5453B9] font-bold" : ""
                 }
