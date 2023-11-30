@@ -70,9 +70,9 @@ const AdminProfile = () => {
                 </div>
 
                 <Chart
-                commentCount={commentCount}
-                usersCount={usersCount}
-                postsCount={postsCount}
+                    commentCount={commentCount}
+                    usersCount={usersCount}
+                    postsCount={postsCount}
                 ></Chart>
             </div>
 
@@ -113,6 +113,18 @@ const AdminProfile = () => {
                     </div>
                 </div>
             </section>
+
+            <form className="">
+                <div className="form-control md:w-1/2">
+                    <label className="label">
+                        <span className="text-xl font-semibold">Add Tag</span>
+                    </label>
+                    <input type="text" name="title" placeholder="title" className="input input-bordered w-full bg-[#F3F3F3]" required />
+                    <button className=" btn btn-outline w-1/3 mb-2">
+                        Submit
+                    </button>
+                </div>
+            </form>
 
         </div>
     );

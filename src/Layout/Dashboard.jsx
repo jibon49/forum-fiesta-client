@@ -86,9 +86,6 @@ const Dashboard = () => {
                             <li><NavLink to='/membership'
                             ><FaMedal></FaMedal> Membership</NavLink></li>
 
-                            <li><NavLink to='/join-us'
-                            ><FaUsers></FaUsers> Join Us</NavLink></li>
-
                         </>
 
                     </ul>

@@ -47,7 +47,7 @@ export const router = createBrowserRouter([
       },
       {
         path:'/membership',
-        element : <UserMembership></UserMembership>
+        element : <PrivateRoute><UserMembership></UserMembership></PrivateRoute>
       },
       {
         path:'/checkout',
@@ -73,31 +73,31 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'my-profile',
-        element: <MyProfile></MyProfile>
+        element: <PrivateRoute><MyProfile></MyProfile></PrivateRoute>
       },
       {
         path: 'ad-post',
-        element: <AdPost></AdPost>
+        element: <PrivateRoute><AdPost></AdPost></PrivateRoute>
       },
       {
         path:'my-post',
-        element:<MyPost></MyPost>
+        element:<PrivateRoute><MyPost></MyPost></PrivateRoute>
       },
       {
         path : 'adminProfile',
-        element : <AdminProfile></AdminProfile>
+        element : <PrivateRoute><AdminProfile></AdminProfile></PrivateRoute>
       },
       {
         path : 'manageUsers',
-        element : <ManageUsers></ManageUsers>
+        element : <PrivateRoute><ManageUsers></ManageUsers></PrivateRoute>
       },
       {
         path : 'reportedComments',
-        element : <ReportedComments></ReportedComments>
+        element : <PrivateRoute><ReportedComments></ReportedComments></PrivateRoute>
       },
       {
         path : 'makeAnnouncement',
-        element : <MakeAnnouncement></MakeAnnouncement>
+        element : <PrivateRoute><MakeAnnouncement></MakeAnnouncement></PrivateRoute>
       }
     ]
   }

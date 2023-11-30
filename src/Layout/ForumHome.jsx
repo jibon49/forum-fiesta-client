@@ -11,32 +11,32 @@ import { FaBullhorn } from "react-icons/fa";
 import useAxiosPublic from "../Hooks/AxiosPublic/useAxiosPublic";
 import Announcements from "../Pages/Home/Announcements/Announcements";
 import usePagination from "../Hooks/usePagination";
+import { useEffect, useState } from "react";
 
 
 const ForumHome = () => {
 
     const axiosPublic = useAxiosPublic()
+    const [allPosts, setAllPosts] = useState([])
+    
 
 
+    useEffect(()=>{
+        axiosPublic.get('/posts')
+        .then(res=>{
+            const sortedPosts = res.data.sort((a, b) => new Date(b.time) - new Date(a.time));
+            setAllPosts(sortedPosts)
+        })
+    },[axiosPublic])
 
-
-    const { data: allPosts = [], error, isLoading } = useQuery({
-        queryKey: ['posts'],
-        queryFn: async () => {
-            const res = await axiosPublic.get('/posts')
-            return res.data;
-        }
-    })
     const itemsPerPage = 5;
 
-    const sortedPosts = allPosts.sort((a, b) => new Date(b.time) - new Date(a.time));
 
 
-    const { currentPage, paginatedData, handlePrevious, handleNext, numberOfPages, setCurrentPage } = usePagination(sortedPosts, itemsPerPage);
+    const { currentPage, paginatedData, handlePrevious, handleNext, numberOfPages, setCurrentPage } = usePagination(allPosts, itemsPerPage);
 
 
     
-
 
     
     const pages = [...Array(numberOfPages).keys()];
@@ -52,8 +52,12 @@ const ForumHome = () => {
     })
     console.log(allAnnouncement)
 
-    if (isLoading) {
-        <span className="loading loading-ring loading-lg"></span>
+    
+    const handleSort =()=>{
+        axiosPublic.get('/posts/sort')
+        .then(res=>{
+            setAllPosts(res.data)
+        })
     }
 
     
@@ -80,9 +84,14 @@ const ForumHome = () => {
                         <div>
 
                         </div>
-                        <div>
-                            <h1 className="bg-blue-500 p-3 font-bold text-white">Forum post
-                        </h1>
+                        <div className="bg-blue-500 flex items-center justify-between">
+                            <h1 className=" p-3 font-bold text-white">Forum post
+                            </h1>
+                            <div>
+                                <button
+                                    onClick={handleSort}
+                                    className="btn px-6">Sort</button>
+                            </div>
                         </div>
                         <div>
                             {

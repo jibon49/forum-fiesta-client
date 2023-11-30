@@ -59,13 +59,14 @@ const PostDetails = () => {
     console.log(allComments);
 
     const handleUpVote = async () => {
+        
         try {
             const response = await axiosPublic.patch(`/posts/${_id}`, {
                 "upvotes": likes + 1,
                 "downvotes": disLikes
             });
-            console.log(response.data);
             setLikes(likes + 1);
+            console.log(response.data);
             refetch();
         } catch (error) {
             console.error('Error updating like count:', error);
@@ -145,13 +146,13 @@ const PostDetails = () => {
                             <div className="flex items-center gap-10">
                                 <div className="flex gap-2 items-center">
                                     <button onClick={handleUpVote}><img className="w-5" src={like} alt="" /></button>
-                                    <p className="text-green-500">{upvotes}</p>
+                                    <p className="text-green-500">{likes}</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <button
                                         onClick={handleDownVote}
                                     ><img className="w-6" src={dislike} alt="" /></button>
-                                    <p className="text-red-500">{votesCount.downvotes}</p>
+                                    <p className="text-red-500">{disLikes}</p>
                                 </div>
                                 <div className="flex gap-2 items-center">
                                     <FcClock className="text-2xl"></FcClock>
