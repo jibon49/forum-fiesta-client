@@ -1,7 +1,6 @@
 import { FcClock } from "react-icons/fc";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Tags from "../Pages/Home/Tags/Tags";
-import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import like from '/like.png'
 import dislike from '/dislike.png'
@@ -90,7 +89,7 @@ const ForumHome = () => {
                             <div>
                                 <button
                                     onClick={handleSort}
-                                    className="btn px-6">Sort</button>
+                                    className="btn btn-accent px-6">Sort by popularity</button>
                             </div>
                         </div>
                         <div>

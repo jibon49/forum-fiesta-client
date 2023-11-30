@@ -56,12 +56,12 @@ export const router = createBrowserRouter([
       {
         path:'my-post-details/:id',
         element:<MyPostDetails></MyPostDetails>,
-        loader:({params})=>fetch(`http://localhost:5000/posts/${params.id}`)
+        loader:({params})=>fetch(`forum-flax-two.vercel.app/posts/${params.id}`)
       },
       {
         path: '/post-details/:id',
         element: <PostDetails></PostDetails>,
-        loader:({params})=>fetch(`http://localhost:5000/posts/${params.id}`)
+        loader:({params})=>fetch(`forum-flax-two.vercel.app/posts/${params.id}`)
       }
     ]
   },
